@@ -19,7 +19,7 @@ const LANGS = {
 
 const STRINGS = {
   en: {
-    appTitle:'MSP Pump Selector', tabSelector:'Selector', tabTender:'Tender',
+    appTitle:'MSP Pump', tabSelector:'Selector', tabTender:'Tender',
     language:'Language',
     dutyPoint:'Duty point',
     material:'Material', matCast:'Cast Iron', matNoryl:'Noryl', matStainless:'Stainless Steel',
@@ -34,7 +34,7 @@ const STRINGS = {
     noMatch:'No match', noModelReaches:'No model in {tag} reaches {head} m at Q={q}',
     stagesResult:'{n} {stage} → {head} m at Q={q}', stage_one:'stage', stage_other:'stages',
     seriesSuffix:'{tag} series',
-    motor:'Motor', hp:'HP', length:'Length',
+    motor:'Motor', hp:'HP', length:'Pump Length',
     alternative:'Alternative', none:'None',
     tender:'Tender', lines_one:'{n} line', lines_other:'{n} lines',
     noLines:'No line items yet. Add your first pump below.', addLine:'+ Add line item',
@@ -45,7 +45,7 @@ const STRINGS = {
     oorCaps:'OUT OF RANGE', noMatchIn:'No match in {tag}', altShort:'Alt'
   },
   tr: {
-    appTitle:'MSP Pompa Seçici', tabSelector:'Seçici', tabTender:'Teklif',
+    appTitle:'MSP Pompa', tabSelector:'Seçici', tabTender:'Teklif',
     language:'Dil',
     dutyPoint:'Çalışma noktası',
     material:'Malzeme', matCast:'Döküm', matNoryl:'Noryl', matStainless:'Paslanmaz Çelik',
@@ -60,7 +60,7 @@ const STRINGS = {
     noMatch:'Eşleşme yok', noModelReaches:'{tag} serisinde Q={q} değerinde {head} m sağlayan model yok',
     stagesResult:'{n} {stage} → {head} m, Q={q}', stage_one:'kademe', stage_other:'kademe',
     seriesSuffix:'{tag} serisi',
-    motor:'Motor', hp:'HP', length:'Uzunluk',
+    motor:'Motor', hp:'HP', length:'Pompa Uzunluğu',
     alternative:'Alternatif', none:'Yok',
     tender:'Teklif', lines_one:'{n} satır', lines_other:'{n} satır',
     noLines:'Henüz satır yok. İlk pompanızı aşağıdan ekleyin.', addLine:'+ Satır ekle',
@@ -71,7 +71,7 @@ const STRINGS = {
     oorCaps:'ARALIK DIŞI', noMatchIn:'{tag} serisinde eşleşme yok', altShort:'Alt'
   },
   ar: {
-    appTitle:'محدد مضخات MSP', tabSelector:'المحدد', tabTender:'العطاء',
+    appTitle:'مضخات MSP', tabSelector:'المحدد', tabTender:'العطاء',
     language:'اللغة',
     dutyPoint:'نقطة التشغيل',
     material:'المادة', matCast:'حديد زهر', matNoryl:'نوريل', matStainless:'فولاذ مقاوم للصدأ',
@@ -86,7 +86,7 @@ const STRINGS = {
     noMatch:'لا يوجد تطابق', noModelReaches:'لا يوجد موديل في {tag} يصل إلى {head} m عند Q={q}',
     stagesResult:'{n} {stage} ← {head} m عند Q={q}', stage_one:'مرحلة', stage_other:'مراحل',
     seriesSuffix:'سلسلة {tag}',
-    motor:'المحرك', hp:'HP', length:'الطول',
+    motor:'المحرك', hp:'HP', length:'طول المضخة',
     alternative:'بديل', none:'لا يوجد',
     tender:'العطاء', lines_one:'{n} بند', lines_other:'{n} بنود',
     noLines:'لا توجد بنود بعد. أضف أول مضخة أدناه.', addLine:'+ إضافة بند',
@@ -97,7 +97,7 @@ const STRINGS = {
     oorCaps:'خارج النطاق', noMatchIn:'لا يوجد تطابق في {tag}', altShort:'بديل'
   },
   es: {
-    appTitle:'Selector de Bombas MSP', tabSelector:'Selector', tabTender:'Licitación',
+    appTitle:'Bombas MSP', tabSelector:'Selector', tabTender:'Licitación',
     language:'Idioma',
     dutyPoint:'Punto de trabajo',
     material:'Material', matCast:'Hierro fundido', matNoryl:'Noryl', matStainless:'Acero inoxidable',
@@ -112,7 +112,7 @@ const STRINGS = {
     noMatch:'Sin coincidencia', noModelReaches:'Ningún modelo en {tag} alcanza {head} m con Q={q}',
     stagesResult:'{n} {stage} → {head} m con Q={q}', stage_one:'etapa', stage_other:'etapas',
     seriesSuffix:'serie {tag}',
-    motor:'Motor', hp:'HP', length:'Longitud',
+    motor:'Motor', hp:'HP', length:'Longitud de bomba',
     alternative:'Alternativa', none:'Ninguna',
     tender:'Licitación', lines_one:'{n} línea', lines_other:'{n} líneas',
     noLines:'Aún no hay líneas. Agregue su primera bomba abajo.', addLine:'+ Agregar línea',

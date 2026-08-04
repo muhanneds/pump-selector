@@ -106,6 +106,20 @@ showing a blank.
 
 ## Changelog
 
+- **Fixed digits entering backwards**: typing `50` produced `05`. The screen
+  re-rendered on every keystroke, which destroyed and rebuilt the `<input>`;
+  the caret-restore that followed cannot work on `<input type="number">`,
+  because the spec makes `selectionStart` null and `setSelectionRange()` throw
+  `InvalidStateError` — so the caret silently reset to position 0 and each new
+  digit landed in front. The computed output is now split from the form
+  (`renderResultsHTML` / `renderHintHTML`, `lineOutputs`), so typing refreshes
+  only the results and never touches the input. Fixed on both the Selector and
+  the Tender screens.
+- **"Length" is now "Pump Length"** in all four languages.
+- **Top-bar title dropped the "Selector" word** — the tab name already appears
+  directly beneath it. Reads "MSP Pump / Selector", and in Spanish the shorter
+  title no longer needs to ellipsise.
+
 - **Four languages (EN/TR/AR/ES)**: added `i18n.js` with a `t()` / `tn()`
   lookup (55 keys per language) and a language picker in the top bar. Arabic
   brings full RTL: mirrored layout, `<bdi>` isolation for technical strings, no

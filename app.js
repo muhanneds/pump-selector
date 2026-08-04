@@ -145,19 +145,17 @@ function render(){
 // ---------------------------------------------------------------------------
 // Selector rendering
 // ---------------------------------------------------------------------------
-function renderSelectorHTML(){
+function selectorCompute(){
   const ready = selectorReady(selState);
   const r = ready
     ? computeDuty(selState.material, selState.sizeClass, selState.frequency, Number(selState.Q)||0, Number(selState.H)||0, Number(selState.safety)||0)
     : null;
+  return { ready, r };
+}
 
-  const materialButtons = MATERIALS.map(m =>
-    `<button data-material="${m}" class="${selState.material===m?'active':''}">${materialLabel(m)}</button>`).join('');
-  const sizeButtons = SIZES.map(([val]) =>
-    `<button data-size="${val}" class="${selState.sizeClass===val?'active':''}">${sizeLabel(val)}</button>`).join('');
-  const freqButtons = FREQS.map(f =>
-    `<button data-freq="${f}" class="${selState.frequency===f?'active':''}">${bidi(f)}</button>`).join('');
-
+// Only the computed output. Kept separate from the form so typing can refresh
+// the results without rebuilding the inputs.
+function renderResultsHTML(ready, r){
   let plateHTML;
   if (!ready){
     const missing = [];
@@ -221,6 +219,27 @@ function renderSelectorHTML(){
     }
   }
 
+  return plateHTML + altHTML;
+}
+
+function renderHintHTML(ready, r){
+  if (!ready) return '';
+  const models = (r.primaryTag!=='OUT OF RANGE' && r.primary && r.primary.maxStages)
+    ? ' · ' + t('modelsIn', {n: bidi(r.primary.maxStages), tag: bidi(prettyTag(r.primaryTag))})
+    : '';
+  return `<div class="hint">${t('designHead', {h: bidi(fmt(r.designHead)), ls: bidi(fmt(Number(selState.Q)/3.6,2))})}${models}</div>`;
+}
+
+function renderSelectorHTML(){
+  const { ready, r } = selectorCompute();
+
+  const materialButtons = MATERIALS.map(m =>
+    `<button data-material="${m}" class="${selState.material===m?'active':''}">${materialLabel(m)}</button>`).join('');
+  const sizeButtons = SIZES.map(([val]) =>
+    `<button data-size="${val}" class="${selState.sizeClass===val?'active':''}">${sizeLabel(val)}</button>`).join('');
+  const freqButtons = FREQS.map(f =>
+    `<button data-freq="${f}" class="${selState.frequency===f?'active':''}">${bidi(f)}</button>`).join('');
+
   return `
     <div class="card">
       <h2>${t('dutyPoint')}</h2>
@@ -250,11 +269,10 @@ function renderSelectorHTML(){
         <label>${t('safety')}</label>
         <div class="numfield" style="max-width:140px"><input type="number" inputmode="decimal" id="inputSafety" value="${selState.safety}"><span class="unit">%</span></div>
       </div>
-      ${ready ? `<div class="hint">${t('designHead', {h: bidi(fmt(r.designHead)), ls: bidi(fmt(Number(selState.Q)/3.6,2))})}${r.primaryTag!=='OUT OF RANGE' && r.primary && r.primary.maxStages ? ' · '+t('modelsIn', {n: bidi(r.primary.maxStages), tag: bidi(prettyTag(r.primaryTag))}) : ''}</div>` : ''}
+      <div id="hintSlot">${renderHintHTML(ready, r)}</div>
     </div>
 
-    ${plateHTML}
-    ${altHTML}
+    <div id="resultArea">${renderResultsHTML(ready, r)}</div>
   `;
 }
 
@@ -279,17 +297,17 @@ function wireSelectorEvents(){
   });
 }
 
-// Re-render only the computed parts, but keep focus in the active text input.
+// Refresh the computed output only. The form — and therefore the focused input
+// and its caret — is left completely untouched.
+//
+// This used to re-render the whole screen on every keystroke and then try to
+// restore the caret. That cannot work for <input type="number">: the spec makes
+// selectionStart null and setSelectionRange() throw InvalidStateError, so the
+// caret silently fell back to position 0 and typing "50" produced "05".
 function renderInPlaceSelector(){
-  const active = document.activeElement;
-  const activeId = active && active.id;
-  const selStart = active && active.selectionStart;
-  document.getElementById('main').innerHTML = renderSelectorHTML();
-  wireSelectorEvents();
-  if (activeId){
-    const el = document.getElementById(activeId);
-    if (el){ el.focus(); try{ el.setSelectionRange(selStart, selStart); }catch(e){} }
-  }
+  const { ready, r } = selectorCompute();
+  document.getElementById('hintSlot').innerHTML = renderHintHTML(ready, r);
+  document.getElementById('resultArea').innerHTML = renderResultsHTML(ready, r);
   document.getElementById('freqPill').textContent = selState.frequency || '';
   document.getElementById('freqPill').style.display = selState.frequency ? '' : 'none';
 }
@@ -318,10 +336,11 @@ function renderTenderHTML(){
   `;
 }
 
-function renderLineCard(line, idx){
+// Computed parts of a tender line, separated from its form controls so typing
+// can refresh them without rebuilding the inputs (see renderInPlaceSelector).
+function lineOutputs(line){
   const Q = Number(line.Q)||0, H = Number(line.H)||0;
   const r = computeDuty(line.material, line.sizeClass, line.frequency, Q, H, 0);
-  const isOpen = openLineId === line.id;
 
   let summaryModel = '—', summaryMeta = t('enterQH');
   let stripHTML = '';
@@ -344,6 +363,13 @@ function renderLineCard(line, idx){
       `;
     }
   }
+
+  return { summaryModel, summaryMeta, stripHTML };
+}
+
+function renderLineCard(line, idx){
+  const isOpen = openLineId === line.id;
+  const { summaryModel, summaryMeta, stripHTML } = lineOutputs(line);
 
   const materialOpts = MATERIALS.map(m=>`<option value="${m}" ${line.material===m?'selected':''}>${materialLabel(m)}</option>`).join('');
   const sizeOpts = SIZES.map(([v])=>`<option value="${v}" ${line.sizeClass===v?'selected':''}>${sizeLabel(v)}</option>`).join('');
@@ -370,7 +396,7 @@ function renderLineCard(line, idx){
         <div><label>${t('flowQUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="Q" value="${line.Q}"></div></div>
         <div><label>${t('headHUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="H" value="${line.H}"></div></div>
       </div>
-      ${stripHTML}
+      <div class="strip-slot">${stripHTML}</div>
       <div class="field" style="display:flex; gap:8px; margin-top:14px;">
         <button class="btn btn-ghost btn-sm" onclick="duplicateLine('${line.id}')">${t('duplicate')}</button>
         <button class="btn btn-danger-ghost btn-sm" onclick="deleteLine('${line.id}')">${t('del')}</button>
@@ -432,16 +458,13 @@ function wireTenderEvents(){
       const line = tenderLines.find(l=>l.id===id);
       line[e.target.dataset.field] = e.target.value;
       saveTenderLines();
-      // live-update just the result strip + summary without losing focus
-      const idx = tenderLines.findIndex(l=>l.id===id);
-      const openBefore = openLineId;
-      openLineId = id;
-      const html = renderLineCard(line, idx);
-      card.outerHTML = html;
-      openLineId = openBefore;
-      const el = document.querySelector(`.line-card[data-id="${id}"] input[data-field="${e.target.dataset.field}"]`);
-      if (el){ el.focus(); const p = e.target.selectionStart; try{ el.setSelectionRange(p,p); }catch(err){} }
-      wireTenderEvents();
+      // Update only the summary and result strip. Rebuilding the card would
+      // destroy the input being typed into and reset its caret to 0.
+      const out = lineOutputs(line);
+      card.querySelector('.summary .m1').innerHTML = out.summaryModel;
+      card.querySelector('.summary .m2').innerHTML = out.summaryMeta;
+      const slot = card.querySelector('.strip-slot');
+      if (slot) slot.innerHTML = out.stripHTML;
     });
   });
 }
