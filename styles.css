@@ -59,11 +59,11 @@ button, input, select{ font-family: inherit; }
   display:flex; align-items:center; justify-content:space-between;
 }
 .topbar .brand{ display:flex; align-items:center; gap:10px; }
-/* Logo sits on the right of the bar, with the frequency pill to its left. */
+/* Whole logo sits on the right of the bar, frequency pill to its left. */
 .topbar-right{ display:flex; align-items:center; gap:12px; }
-.topbar .brand-mark{
-  height:32px; width:auto; display:block; flex:none;
-  /* the mark is a white PNG so it reads against the navy bar */
+.topbar .brand-logo{
+  height:30px; width:auto; display:block; flex:none;
+  /* white PNG of the full logo, so it reads against the navy bar */
 }
 .topbar h1{ font-size:16px; margin:0; font-weight:700; letter-spacing:.2px; }
 .topbar .sub{ font-size:11px; color:#AEC1E0; margin-top:1px; }

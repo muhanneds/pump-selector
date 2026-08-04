@@ -82,14 +82,18 @@ time the workbook is updated, referencing this app.
 
 ## Changelog
 
-- **Logo moved right + glossy source**: all icons and the top-bar mark are now
-  generated from the customer's glossy master logo (`icons/msp-logo-source.png`,
-  downscaled from a 4096px transparent PNG). The mark sits on the **right** of
-  the top bar, with the frequency pill to its left; verified at 375px phone
-  width with no overlap and no horizontal scroll. The gloss is deliberately
-  discarded for both uses: at 32px on a navy bar, and at 48px as an icon, the
-  metallic gradients turn to mud — a flat white silhouette is legible where the
-  gloss is not.
+- **Whole logo, right side of the top bar**: the bar shows the **complete**
+  logo — droplet, `msp` wordmark and "Pumps & Motors" tagline — not just the
+  droplet, in white at 30x59px on the right, with the frequency pill to its
+  left. Verified at 375px phone width: title 18–170, pill 236–286, logo
+  298–357, no overlap and no horizontal scroll.
+  The **app icons are the droplet only** and are deliberately different: the
+  full logo is ~2:1, so squeezing it into a square icon shrinks it until the
+  tagline is unreadable at 48px. Mark-only fills the square properly. Icons
+  and bar are both generated from the customer's glossy master
+  (`icons/msp-logo-source.png`, from a 4096px transparent PNG).
+  Gloss is flattened to white in both places — metallic gradients are not
+  resolvable at 30px on navy, nor at 48px as an icon.
 - **Branding + empty start**: the real MSP mark now appears in the top bar
   (white, so it reads on the navy) and the app icons are generated from the
   logo — a white droplet on navy `#1B3A6B`, matching the app's theme colour,
