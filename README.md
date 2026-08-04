@@ -80,7 +80,39 @@ time the workbook is updated, referencing this app.
   under "6"+". Flagging this in case you'd like it changed — it's a one-line
   fix in `engine.js` if so.
 
+## Languages
+
+The interface runs in **English, Turkish, Arabic and Spanish**, picked from the
+`EN/TR/AR/ES` selector in the top bar. The choice is remembered per device; on
+first run the app follows the phone's own language and falls back to English.
+
+Arabic switches the whole layout to **right-to-left** (`dir="rtl"`). Pump codes,
+numbers and unit symbols stay left-to-right inside Arabic text — they are
+wrapped in `<bdi>` so `MSP610-07` can never render as `07-MSP610`.
+
+What is **not** translated, by design:
+- Model codes and series tags (`MSP610-07`, `MSP 610`) — identical in every market.
+- SI unit symbols (`m`, `kW`, `HP`, `mm`, `m³/h`, `L/s`) — international symbols,
+  not words.
+- Frequencies (`50Hz`, `60Hz`).
+- The values the engine keys on: material names, size codes, series tags. Only
+  their **labels** are translated, so selection logic is completely unaffected —
+  verified that all four languages return the same model for the same duty point.
+
+To add a language: add an entry to `LANGS` and a matching block to `STRINGS` in
+`i18n.js`, then add an `<option>` to the picker in `index.html`. Every language
+must define the same key set; missing keys fall back to English rather than
+showing a blank.
+
 ## Changelog
+
+- **Four languages (EN/TR/AR/ES)**: added `i18n.js` with a `t()` / `tn()`
+  lookup (55 keys per language) and a language picker in the top bar. Arabic
+  brings full RTL: mirrored layout, `<bdi>` isolation for technical strings, no
+  uppercase/letter-spacing (Arabic has no capitals), and logical margins so
+  units sit correctly in both directions. The top bar's title now shrinks with
+  an ellipsis — Spanish is long enough to have overlapped the controls
+  otherwise. Selection logic untouched and confirmed identical across all four.
 
 - **Whole logo, right side of the top bar**: the bar shows the **complete**
   logo — droplet, `msp` wordmark and "Pumps & Motors" tagline — not just the

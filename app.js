@@ -106,7 +106,25 @@ function switchTab(tab){
   currentTab = tab;
   document.getElementById('tabSelector').classList.toggle('active', tab==='selector');
   document.getElementById('tabTender').classList.toggle('active', tab==='tender');
-  document.getElementById('topSub').textContent = tab==='selector' ? 'Selector' : 'Tender';
+  render();
+}
+
+// Re-label everything that lives outside <main> (top bar, tab bar, picker).
+function renderChrome(){
+  document.getElementById('appTitle').textContent = t('appTitle');
+  document.getElementById('topSub').textContent =
+    currentTab==='selector' ? t('tabSelector') : t('tabTender');
+  document.getElementById('tabSelectorLabel').textContent = t('tabSelector');
+  document.getElementById('tabTenderLabel').textContent = t('tabTender');
+  const sel = document.getElementById('langSel');
+  sel.setAttribute('aria-label', t('language'));
+  sel.title = t('language');
+  if (sel.value !== currentLang) sel.value = currentLang;
+}
+
+function changeLang(lang){
+  setLang(lang);
+  renderChrome();
   render();
 }
 
@@ -134,51 +152,56 @@ function renderSelectorHTML(){
     : null;
 
   const materialButtons = MATERIALS.map(m =>
-    `<button data-material="${m}" class="${selState.material===m?'active':''}">${m}</button>`).join('');
-  const sizeButtons = SIZES.map(([val,label]) =>
-    `<button data-size="${val}" class="${selState.sizeClass===val?'active':''}">${label}</button>`).join('');
+    `<button data-material="${m}" class="${selState.material===m?'active':''}">${materialLabel(m)}</button>`).join('');
+  const sizeButtons = SIZES.map(([val]) =>
+    `<button data-size="${val}" class="${selState.sizeClass===val?'active':''}">${sizeLabel(val)}</button>`).join('');
   const freqButtons = FREQS.map(f =>
-    `<button data-freq="${f}" class="${selState.frequency===f?'active':''}">${f}</button>`).join('');
+    `<button data-freq="${f}" class="${selState.frequency===f?'active':''}">${bidi(f)}</button>`).join('');
 
   let plateHTML;
   if (!ready){
     const missing = [];
-    if (!selState.material)  missing.push('material');
-    if (!selState.sizeClass) missing.push('borehole size');
-    if (!selState.frequency) missing.push('frequency');
-    if (!(Number(selState.Q) > 0)) missing.push('flow Q');
-    if (!(Number(selState.H) > 0)) missing.push('head H');
+    if (!selState.material)  missing.push(t('fMaterial'));
+    if (!selState.sizeClass) missing.push(t('fBore'));
+    if (!selState.frequency) missing.push(t('fFreq'));
+    if (!(Number(selState.Q) > 0)) missing.push(t('fFlow'));
+    if (!(Number(selState.H) > 0)) missing.push(t('fHead'));
     plateHTML = `
       <div class="plate empty">
-        <div class="plate-label">Selected model</div>
+        <div class="plate-label">${t('selectedModel')}</div>
         <div class="model">—</div>
-        <div class="status">Choose ${missing.join(', ')} to see a selection</div>
+        <div class="status">${t('chooseToSee', {fields: missing.join(currentLang==='ar' ? '، ' : ', ')})}</div>
       </div>`;
   } else if (r.primaryTag === 'OUT OF RANGE'){
     plateHTML = `
       <div class="plate">
-        <div class="plate-label">Selected series</div>
-        <div class="model">Out of range</div>
-        <div class="status warn">⚠ No series covers this duty point</div>
+        <div class="plate-label">${t('selectedSeries')}</div>
+        <div class="model">${t('outOfRange')}</div>
+        <div class="status warn">⚠ ${t('noSeriesCovers')}</div>
       </div>`;
   } else if (!r.primary.model){
     plateHTML = `
       <div class="plate">
-        <div class="plate-label">Selected series · ${prettyTag(r.primaryTag)}</div>
-        <div class="model">No match</div>
-        <div class="status warn">⚠ No model in ${prettyTag(r.primaryTag)} reaches ${fmt(r.designHead)} m at Q=${fmt(r.Q,2)}</div>
+        <div class="plate-label">${t('selectedSeries')} · ${bidi(prettyTag(r.primaryTag))}</div>
+        <div class="model">${t('noMatch')}</div>
+        <div class="status warn">⚠ ${t('noModelReaches', {tag: bidi(prettyTag(r.primaryTag)), head: bidi(fmt(r.designHead)), q: bidi(fmt(r.Q,2))})}</div>
       </div>`;
   } else {
     plateHTML = `
       <div class="plate">
-        <div class="plate-label">Selected model</div>
-        <div class="model">${r.primary.model.name}</div>
-        <span class="series-tag">${prettyTag(r.primaryTag)} series</span>
-        <div class="status ok">✓ ${r.primary.stages ?? '—'} stage${r.primary.stages===1?'':'s'} → ${fmt(r.primary.achievedHead)} m at Q=${fmt(r.Q,2)}</div>
+        <div class="plate-label">${t('selectedModel')}</div>
+        <div class="model"><bdi>${r.primary.model.name}</bdi></div>
+        <span class="series-tag">${t('seriesSuffix', {tag: bidi(prettyTag(r.primaryTag))})}</span>
+        <div class="status ok">✓ ${t('stagesResult', {
+            n: bidi(r.primary.stages ?? '—'),
+            stage: tn('stage', r.primary.stages ?? 0),
+            head: bidi(fmt(r.primary.achievedHead)),
+            q: bidi(fmt(r.Q,2))
+        })}</div>
         <div class="plate-grid">
-          <div><div class="stat-label">Motor</div><div class="stat-value">${fmt(r.primary.model.kw,2)} kW</div></div>
-          <div><div class="stat-label">HP</div><div class="stat-value">${fmt(r.primary.model.hp,2)}</div></div>
-          <div><div class="stat-label">Length</div><div class="stat-value">${r.primary.model.len ? r.primary.model.len+' mm' : '—'}</div></div>
+          <div><div class="stat-label">${t('motor')}</div><div class="stat-value"><bdi>${fmt(r.primary.model.kw,2)} kW</bdi></div></div>
+          <div><div class="stat-label">${t('hp')}</div><div class="stat-value"><bdi>${fmt(r.primary.model.hp,2)}</bdi></div></div>
+          <div><div class="stat-label">${t('length')}</div><div class="stat-value"><bdi>${r.primary.model.len ? r.primary.model.len+' mm' : '—'}</bdi></div></div>
         </div>
       </div>`;
   }
@@ -186,48 +209,48 @@ function renderSelectorHTML(){
   let altHTML = '';
   if (ready && r.primaryTag !== 'OUT OF RANGE' && r.altTag && r.altTag !== '-'){
     if (r.altTag === 'NONE'){
-      altHTML = `<div class="altbox"><div class="alt-label">Alternative</div><div class="alt-model">None</div></div>`;
+      altHTML = `<div class="altbox"><div class="alt-label">${t('alternative')}</div><div class="alt-model">${t('none')}</div></div>`;
     } else {
       altHTML = `<div class="altbox">
         <div>
-          <div class="alt-label">Alternative · ${prettyTag(r.altTag)}</div>
-          <div class="alt-model">${r.alt && r.alt.model ? r.alt.model.name : 'No match'}</div>
+          <div class="alt-label">${t('alternative')} · ${bidi(prettyTag(r.altTag))}</div>
+          <div class="alt-model">${r.alt && r.alt.model ? '<bdi>'+r.alt.model.name+'</bdi>' : t('noMatch')}</div>
         </div>
-        <div class="alt-head">${r.alt && r.alt.achievedHead!=null ? fmt(r.alt.achievedHead)+' m' : ''}</div>
+        <div class="alt-head">${r.alt && r.alt.achievedHead!=null ? '<bdi>'+fmt(r.alt.achievedHead)+' m</bdi>' : ''}</div>
       </div>`;
     }
   }
 
   return `
     <div class="card">
-      <h2>Duty point</h2>
+      <h2>${t('dutyPoint')}</h2>
       <div class="field">
-        <label>Material</label>
+        <label>${t('material')}</label>
         <div class="segmented" id="materialSeg">${materialButtons}</div>
       </div>
       <div class="field">
-        <label>Borehole size</label>
+        <label>${t('boreSize')}</label>
         <div class="segmented" id="sizeSeg">${sizeButtons}</div>
       </div>
       <div class="field">
-        <label>Frequency</label>
+        <label>${t('frequency')}</label>
         <div class="segmented freq" id="freqSeg">${freqButtons}</div>
       </div>
       <div class="field row2">
         <div>
-          <label>Flow Q</label>
-          <div class="numfield"><input type="number" inputmode="decimal" id="inputQ" value="${selState.Q}"><span class="unit">m³/h</span></div>
+          <label>${t('flowQ')}</label>
+          <div class="numfield"><input type="number" inputmode="decimal" id="inputQ" value="${selState.Q}"><span class="unit"><bdi>m³/h</bdi></span></div>
         </div>
         <div>
-          <label>Head H</label>
-          <div class="numfield"><input type="number" inputmode="decimal" id="inputH" value="${selState.H}"><span class="unit">m</span></div>
+          <label>${t('headH')}</label>
+          <div class="numfield"><input type="number" inputmode="decimal" id="inputH" value="${selState.H}"><span class="unit"><bdi>m</bdi></span></div>
         </div>
       </div>
       <div class="field">
-        <label>Safety margin</label>
+        <label>${t('safety')}</label>
         <div class="numfield" style="max-width:140px"><input type="number" inputmode="decimal" id="inputSafety" value="${selState.safety}"><span class="unit">%</span></div>
       </div>
-      ${ready ? `<div class="hint">Design head ${fmt(r.designHead)} m · ${fmt(Number(selState.Q)/3.6,2)} L/s${r.primaryTag!=='OUT OF RANGE' && r.primary && r.primary.maxStages ? ' · '+r.primary.maxStages+' models in '+prettyTag(r.primaryTag) : ''}</div>` : ''}
+      ${ready ? `<div class="hint">${t('designHead', {h: bidi(fmt(r.designHead)), ls: bidi(fmt(Number(selState.Q)/3.6,2))})}${r.primaryTag!=='OUT OF RANGE' && r.primary && r.primary.maxStages ? ' · '+t('modelsIn', {n: bidi(r.primary.maxStages), tag: bidi(prettyTag(r.primaryTag))}) : ''}</div>` : ''}
     </div>
 
     ${plateHTML}
@@ -277,20 +300,20 @@ function renderInPlaceSelector(){
 function renderTenderHTML(){
   if (tenderLines.length === 0){
     return `
-      <div class="tender-header"><h2>Tender</h2><span class="tender-count">0 lines</span></div>
+      <div class="tender-header"><h2>${t('tender')}</h2><span class="tender-count">${tn('lines', 0)}</span></div>
       <div class="empty">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
-        <p>No line items yet. Add your first pump below.</p>
+        <p>${t('noLines')}</p>
       </div>
-      <button class="btn btn-primary btn-block" onclick="addLine()">+ Add line item</button>
+      <button class="btn btn-primary btn-block" onclick="addLine()">${t('addLine')}</button>
     `;
   }
 
   const lines = tenderLines.map((line, idx) => renderLineCard(line, idx)).join('');
   return `
-    <div class="tender-header"><h2>Tender</h2><span class="tender-count">${tenderLines.length} line${tenderLines.length===1?'':'s'}</span></div>
+    <div class="tender-header"><h2>${t('tender')}</h2><span class="tender-count">${tn('lines', tenderLines.length)}</span></div>
     ${lines}
-    <button class="btn btn-primary btn-block" onclick="addLine()">+ Add line item</button>
+    <button class="btn btn-primary btn-block" onclick="addLine()">${t('addLine')}</button>
     <div style="height:4px"></div>
   `;
 }
@@ -300,30 +323,30 @@ function renderLineCard(line, idx){
   const r = computeDuty(line.material, line.sizeClass, line.frequency, Q, H, 0);
   const isOpen = openLineId === line.id;
 
-  let summaryModel = '—', summaryMeta = 'Enter Q and H';
+  let summaryModel = '—', summaryMeta = t('enterQH');
   let stripHTML = '';
   if (Q > 0 && H > 0){
     if (r.primaryTag === 'OUT OF RANGE'){
-      summaryModel = 'Out of range'; summaryMeta = `${line.material} · ${Q} m³/h @ ${H} m`;
-      stripHTML = `<div class="result-strip"><span class="rmodel oor">OUT OF RANGE</span></div>`;
+      summaryModel = t('outOfRange'); summaryMeta = `${materialLabel(line.material)} · <bdi>${Q} m³/h @ ${H} m</bdi>`;
+      stripHTML = `<div class="result-strip"><span class="rmodel oor">${t('oorCaps')}</span></div>`;
     } else if (!r.primary.model){
-      summaryModel = 'No match'; summaryMeta = prettyTag(r.primaryTag);
-      stripHTML = `<div class="result-strip"><span class="rmodel oor">No match in ${prettyTag(r.primaryTag)}</span></div>`;
+      summaryModel = t('noMatch'); summaryMeta = `<bdi>${prettyTag(r.primaryTag)}</bdi>`;
+      stripHTML = `<div class="result-strip"><span class="rmodel oor">${t('noMatchIn', {tag: bidi(prettyTag(r.primaryTag))})}</span></div>`;
     } else {
-      summaryModel = r.primary.model.name;
-      summaryMeta = `${fmt(r.primary.achievedHead)} m · ${fmt(r.primary.model.hp,2)} HP`;
+      summaryModel = `<bdi>${r.primary.model.name}</bdi>`;
+      summaryMeta = `<bdi>${fmt(r.primary.achievedHead)} m · ${fmt(r.primary.model.hp,2)} HP</bdi>`;
       stripHTML = `
         <div class="result-strip">
-          <span class="rmodel">${r.primary.model.name}</span>
-          <span class="rmeta">${fmt(r.primary.achievedHead)} m · ${fmt(r.primary.model.kw,2)} kW · ${r.primary.model.len?r.primary.model.len+'mm':'—'}</span>
+          <span class="rmodel"><bdi>${r.primary.model.name}</bdi></span>
+          <span class="rmeta"><bdi>${fmt(r.primary.achievedHead)} m · ${fmt(r.primary.model.kw,2)} kW · ${r.primary.model.len?r.primary.model.len+'mm':'—'}</bdi></span>
         </div>
-        ${r.alt && r.alt.model ? `<div class="result-strip" style="margin-top:6px;opacity:.75"><span class="rmeta">Alt ${prettyTag(r.altTag)}</span><span class="rmeta">${r.alt.model.name}</span></div>` : ''}
+        ${r.alt && r.alt.model ? `<div class="result-strip" style="margin-top:6px;opacity:.75"><span class="rmeta">${t('altShort')} <bdi>${prettyTag(r.altTag)}</bdi></span><span class="rmeta"><bdi>${r.alt.model.name}</bdi></span></div>` : ''}
       `;
     }
   }
 
-  const materialOpts = MATERIALS.map(m=>`<option value="${m}" ${line.material===m?'selected':''}>${m}</option>`).join('');
-  const sizeOpts = SIZES.map(([v,l])=>`<option value="${v}" ${line.sizeClass===v?'selected':''}>${l}</option>`).join('');
+  const materialOpts = MATERIALS.map(m=>`<option value="${m}" ${line.material===m?'selected':''}>${materialLabel(m)}</option>`).join('');
+  const sizeOpts = SIZES.map(([v])=>`<option value="${v}" ${line.sizeClass===v?'selected':''}>${sizeLabel(v)}</option>`).join('');
   const freqOpts = FREQS.map(f=>`<option value="${f}" ${line.frequency===f?'selected':''}>${f}</option>`).join('');
 
   return `
@@ -339,18 +362,18 @@ function renderLineCard(line, idx){
     ${isOpen ? `
     <div class="line-card-body">
       <div class="field row3">
-        <div><label>Material</label><select class="line-select" data-field="material">${materialOpts}</select></div>
-        <div><label>Bore</label><select class="line-select" data-field="sizeClass">${sizeOpts}</select></div>
-        <div><label>Freq</label><select class="line-select" data-field="frequency">${freqOpts}</select></div>
+        <div><label>${t('material')}</label><select class="line-select" data-field="material">${materialOpts}</select></div>
+        <div><label>${t('bore')}</label><select class="line-select" data-field="sizeClass">${sizeOpts}</select></div>
+        <div><label>${t('freq')}</label><select class="line-select" data-field="frequency">${freqOpts}</select></div>
       </div>
       <div class="field row2">
-        <div><label>Flow Q (m³/h)</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="Q" value="${line.Q}"></div></div>
-        <div><label>Head H (m)</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="H" value="${line.H}"></div></div>
+        <div><label>${t('flowQUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="Q" value="${line.Q}"></div></div>
+        <div><label>${t('headHUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="H" value="${line.H}"></div></div>
       </div>
       ${stripHTML}
       <div class="field" style="display:flex; gap:8px; margin-top:14px;">
-        <button class="btn btn-ghost btn-sm" onclick="duplicateLine('${line.id}')">Duplicate</button>
-        <button class="btn btn-danger-ghost btn-sm" onclick="deleteLine('${line.id}')">Delete</button>
+        <button class="btn btn-ghost btn-sm" onclick="duplicateLine('${line.id}')">${t('duplicate')}</button>
+        <button class="btn btn-danger-ghost btn-sm" onclick="deleteLine('${line.id}')">${t('del')}</button>
       </div>
     </div>` : ''}
   </div>`;
@@ -378,14 +401,14 @@ function duplicateLine(id){
   const idx = tenderLines.findIndex(l=>l.id===id);
   tenderLines.splice(idx+1, 0, copy);
   saveTenderLines();
-  toast('Line duplicated');
+  toast(t('lineDuplicated'));
   render();
 }
 function deleteLine(id){
   tenderLines = tenderLines.filter(l=>l.id!==id);
   if (openLineId === id) openLineId = null;
   saveTenderLines();
-  toast('Line removed');
+  toast(t('lineRemoved'));
   render();
 }
 
@@ -426,6 +449,7 @@ function wireTenderEvents(){
 // ---------------------------------------------------------------------------
 // init
 // ---------------------------------------------------------------------------
+renderChrome();
 render();
 
 if ('serviceWorker' in navigator){

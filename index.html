@@ -20,11 +20,17 @@
   <div class="topbar">
     <div class="brand">
       <div>
-        <h1>MSP Pump Selector</h1>
+        <h1 id="appTitle">MSP Pump Selector</h1>
         <div class="sub" id="topSub">Selector</div>
       </div>
     </div>
     <div class="topbar-right">
+      <select class="lang-select" id="langSel" onchange="changeLang(this.value)">
+        <option value="en">EN</option>
+        <option value="tr">TR</option>
+        <option value="ar">AR</option>
+        <option value="es">ES</option>
+      </select>
       <div class="freq-pill" id="freqPill">50Hz</div>
       <img class="brand-logo" src="icons/msp-logo-white.png" alt="MSP Pumps &amp; Motors">
     </div>
@@ -37,16 +43,17 @@
   <nav class="tabbar">
     <button id="tabSelector" class="active" onclick="switchTab('selector')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      Selector
+      <span id="tabSelectorLabel">Selector</span>
     </button>
     <button id="tabTender" onclick="switchTab('tender')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Tender
+      <span id="tabTenderLabel">Tender</span>
     </button>
   </nav>
 
 </div>
 
+<script src="i18n.js"></script>
 <script src="engine.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>

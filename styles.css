@@ -72,6 +72,23 @@ button, input, select{ font-family: inherit; }
   background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28);
   color:#fff; padding:5px 10px; border-radius:999px;
 }
+/* Language picker — native <select> so phones use their own OS picker. */
+.lang-select{
+  appearance:none; -webkit-appearance:none;
+  background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28);
+  color:#fff; font-size:12px; font-weight:700; letter-spacing:.4px;
+  padding:5px 8px; border-radius:999px; cursor:pointer; flex:none;
+  text-align:center; text-align-last:center;
+}
+.lang-select option{ color: var(--ink); background:#fff; }
+/* The title is the only elastic item in the bar. The whole chain needs
+   min-width:0, or the nowrap h1 refuses to shrink and overlaps the controls
+   in languages with longer titles (e.g. Spanish). */
+.topbar .brand{ flex:1 1 auto; min-width:0; }
+.topbar .brand > div{ min-width:0; }
+.topbar-right{ flex:0 0 auto; }
+.topbar h1,
+.topbar .sub{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 main{ flex:1; padding: 16px 14px calc(96px + env(safe-area-inset-bottom)); }
 
@@ -272,3 +289,47 @@ main{ flex:1; padding: 16px 14px calc(96px + env(safe-area-inset-bottom)); }
 @media (min-width: 480px){
   .plate .model{ font-size:28px; }
 }
+
+/* =========================================================================
+   RTL (Arabic)
+   Flex/grid mirror themselves; these are the cases that do not.
+   ========================================================================= */
+/* Logical property so the unit sits after the number in both directions. */
+.numfield .unit{ margin-left:0; margin-inline-start:8px; }
+
+/* Model codes, numbers and units are always read left-to-right, even inside
+   Arabic text. <bdi> isolates them; this keeps their internal order intact so
+   "MSP610-07" never renders as "07-MSP610". */
+bdi{ unicode-bidi: isolate; }
+[dir="rtl"] .plate .model,
+[dir="rtl"] .plate-grid .stat-value,
+[dir="rtl"] .tender-count,
+[dir="rtl"] .result-strip .rmodel,
+[dir="rtl"] .result-strip .rmeta,
+[dir="rtl"] .altbox .alt-model,
+[dir="rtl"] .altbox .alt-head,
+[dir="rtl"] .line-card-head .summary .m1,
+[dir="rtl"] .numfield input{
+  direction: ltr;
+  text-align: right;
+}
+/* Numeric entry stays LTR but should read from the start of the field. */
+[dir="rtl"] .numfield input{ text-align: left; }
+
+/* Toast is centred by transform, which RTL must not flip. */
+[dir="rtl"] #toast{ transform: translateX(50%) translateY(20px); right:50%; left:auto; }
+[dir="rtl"] #toast.show{ transform: translateX(50%) translateY(0); }
+
+/* Arabic has no capital letters — uppercasing and wide tracking hurt it. */
+[dir="rtl"] .card h2,
+[dir="rtl"] .field > label,
+[dir="rtl"] .plate .plate-label,
+[dir="rtl"] .plate-grid .stat-label,
+[dir="rtl"] .altbox .alt-label{
+  text-transform: none;
+  letter-spacing: 0;
+}
+/* Slightly larger: Arabic glyphs carry more detail at the same pixel size. */
+[dir="rtl"] .field > label,
+[dir="rtl"] .plate .plate-label{ font-size:12.5px; }
+[dir="rtl"] .tabbar button{ font-size:12px; }
