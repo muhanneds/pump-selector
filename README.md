@@ -84,8 +84,12 @@ time the workbook is updated, referencing this app.
 
 - **Branding + empty start**: the real MSP mark now appears in the top bar
   (white, so it reads on the navy) and the app icons are generated from the
-  logo — brand blue `#0A75BB` droplet on white, with a maskable variant whose
-  artwork stays inside the 80% safe zone. The Selector now **starts empty**:
+  logo — a white droplet on navy `#1B3A6B`, matching the app's theme colour,
+  with a maskable variant whose artwork stays inside the 80% safe zone
+  (verified: 184.2px corner radius against a 204.8px safe radius).
+  The mark is tall and narrow, so it is scaled by height rather than fitted
+  to a square box — box-fitting left it filling only ~31% of the icon width
+  and it washed out at 48px. The Selector now **starts empty**:
   no material, bore, frequency, Q or H is preselected, and no model is shown
   until all five are set. The plate lists what is still missing. Selection
   logic is unchanged — verified that a completed duty point returns exactly
