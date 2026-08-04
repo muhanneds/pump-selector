@@ -82,6 +82,14 @@ time the workbook is updated, referencing this app.
 
 ## Changelog
 
+- **Logo moved right + glossy source**: all icons and the top-bar mark are now
+  generated from the customer's glossy master logo (`icons/msp-logo-source.png`,
+  downscaled from a 4096px transparent PNG). The mark sits on the **right** of
+  the top bar, with the frequency pill to its left; verified at 375px phone
+  width with no overlap and no horizontal scroll. The gloss is deliberately
+  discarded for both uses: at 32px on a navy bar, and at 48px as an icon, the
+  metallic gradients turn to mud — a flat white silhouette is legible where the
+  gloss is not.
 - **Branding + empty start**: the real MSP mark now appears in the top bar
   (white, so it reads on the navy) and the app icons are generated from the
   logo — a white droplet on navy `#1B3A6B`, matching the app's theme colour,
