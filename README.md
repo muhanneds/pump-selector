@@ -143,6 +143,16 @@ showing a blank.
 
 ## Changelog
 
+- **Redesigned the desktop layout.** The first pass just widened the phone
+  screen, which read as a phone UI stretched across a monitor — the reported
+  complaint. It's now designed for the width: gradient header with a teal
+  accent line, tabs as an underlined strip, the result panel rendered as an
+  instrument panel (44px model number, vertical rules between Motor/HP/Pump
+  Length like a spec sheet), the whole shell floated as a card on a grey page
+  background with a real shadow, and visible focus rings for keyboard users.
+  Still nothing below 900px touched — confirmed the phone build's shadow,
+  background and topbar gradient are all still `none`.
+
 - **Fixed digits entering backwards**: typing `50` produced `05`. The screen
   re-rendered on every keystroke, which destroyed and rebuilt the `<input>`;
   the caret-restore that followed cannot work on `<input type="number">`,

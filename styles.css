@@ -299,57 +299,111 @@ main{ flex:1; padding: 16px 14px calc(96px + env(safe-area-inset-bottom)); }
    Nothing below 900px is touched — the installed phone app is unaffected.
    ========================================================================= */
 @media (min-width: 900px){
-  #app{ max-width: 1080px; box-shadow: 0 0 0 1px var(--line); min-height:100vh; }
+  /* The page, not just the app, gets a ground colour so the shell reads as a
+     document on a desk rather than a phone floating in space. */
+  body{ background: #E4EAF2; }
+  #app{
+    max-width: 1160px;
+    min-height:100vh;
+    background: var(--bg);
+    box-shadow: 0 0 0 1px rgba(20,33,58,.09), 0 18px 50px rgba(20,33,58,.10);
+  }
 
-  .topbar{ padding: 18px 26px; }
-  .topbar h1{ font-size:19px; }
-  .topbar .sub{ font-size:12px; }
-  .topbar .brand-logo{ height:38px; }
-  .lang-select{ font-size:13px; padding:6px 10px; }
+  /* ---------- Header ---------- */
+  .topbar{
+    padding: 20px 30px;
+    background: linear-gradient(105deg, var(--navy-deep) 0%, var(--navy) 55%, #24487f 100%);
+    border-bottom: 3px solid var(--teal);
+  }
+  .topbar h1{ font-size:20px; letter-spacing:.3px; }
+  .topbar .sub{ font-size:12px; margin-top:2px; }
+  .topbar .brand-logo{ height:40px; }
+  .topbar-right{ gap:14px; }
+  .lang-select{ font-size:13px; padding:7px 12px; }
+  .freq-pill{ font-size:13px; padding:6px 12px; }
 
-  /* Tab bar: from fixed-bottom to a normal row directly under the header. */
+  /* ---------- Tabs: bottom bar becomes a real tab strip ---------- */
   .topbar{ order:0; }
   .tabbar{ order:1; }
   main{ order:2; }
   .tabbar{
     position: static; max-width:none; margin:0;
+    background: var(--surface);
     border-top:none; border-bottom:1px solid var(--line);
-    box-shadow:none; padding: 0 18px;
-    gap:6px;
+    box-shadow:none; padding: 0 30px; gap:4px;
   }
   .tabbar button{
-    flex:0 0 auto; flex-direction:row; gap:8px;
-    padding:14px 18px; font-size:13.5px;
-    border-bottom:2.5px solid transparent; border-radius:0;
+    flex:0 0 auto; flex-direction:row; gap:9px;
+    padding:15px 20px; font-size:14px; letter-spacing:.2px;
+    border-bottom:3px solid transparent; border-radius:0;
+    transition: color .15s, border-color .15s;
   }
   .tabbar button svg{ width:18px; height:18px; }
-  .tabbar button.active{ border-bottom-color: var(--navy); background:transparent; }
+  .tabbar button.active{ border-bottom-color: var(--teal); background:transparent; }
 
-  main{ padding: 24px 26px 40px; }
+  main{ padding: 28px 30px 48px; }
 
-  /* Selector: form left, result right. */
+  /* ---------- Selector: compact form, generous result ---------- */
   main[data-tab="selector"]{
     display:grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-    gap: 22px;
+    grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+    gap: 28px;
     align-items: start;
   }
-  main[data-tab="selector"] .card{ margin-bottom:0; padding:22px; }
-  main[data-tab="selector"] #resultArea{ position: sticky; top: 22px; }
-  .card h2{ font-size:13.5px; }
-  .field > label{ font-size:12.5px; }
-  .segmented button{ padding:11px 6px; font-size:13.5px; }
-  .numfield{ padding:10px 14px; }
-  .numfield input{ font-size:21px; }
-  .plate{ padding:22px 22px 20px; }
-  .plate .model{ font-size:32px; }
-  .plate-grid .stat-value{ font-size:17px; }
+  main[data-tab="selector"] .card{ margin-bottom:0; padding:24px 24px 22px; border-radius:20px; }
+  main[data-tab="selector"] #resultArea{ position: sticky; top: 24px; }
 
-  /* Tender is a list — a full 1080px line would be unreadable. */
-  main[data-tab="tender"]{ max-width: 760px; margin-inline: auto; width:100%; }
+  .card h2{ font-size:13px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+  .field{ margin-bottom:16px; }
+  .field > label{ font-size:11.5px; }
+  .segmented button{ padding:11px 6px; font-size:13px; }
+  .numfield{ padding:11px 14px; }
+  .numfield input{ font-size:22px; }
+
+  /* ---------- Result: read as a spec sheet, not a phone card ---------- */
+  .plate{ padding: 28px 30px 26px; border-radius:20px; }
+  .plate .plate-label{ font-size:11.5px; letter-spacing:1.4px; margin-bottom:10px; }
+  .plate .model{ font-size:44px; letter-spacing:.5px; }
+  .plate .series-tag{ font-size:13px; padding:4px 12px; margin-top:10px; }
+  .plate .status{ font-size:14px; margin-top:16px; }
+  .plate-grid{
+    grid-template-columns: repeat(3, 1fr);
+    margin-top:24px; padding-top:20px; gap:0;
+  }
+  /* Vertical rules between the three specs — reads as an instrument panel. */
+  .plate-grid > div{ padding-inline:18px; }
+  .plate-grid > div:first-child{ padding-inline-start:0; }
+  .plate-grid > div:last-child{ padding-inline-end:0; }
+  .plate-grid > div + div{ border-inline-start:1px solid rgba(255,255,255,.16); }
+  .plate-grid .stat-label{ font-size:10.5px; }
+  .plate-grid .stat-value{ font-size:22px; margin-top:6px; }
+
+  /* Empty state should fill the column, not sit as a thin sliver. */
+  .plate.empty{ padding:46px 30px; text-align:center; }
+  .plate.empty .model{ font-size:40px; }
+  .plate.empty .status{ justify-content:center; font-size:14px; max-width:34ch; margin-inline:auto; }
+
+  .altbox{ padding:16px 20px; border-radius:14px; }
+  .altbox .alt-label{ font-size:11.5px; }
+  .altbox .alt-model{ font-size:16px; }
+  .altbox .alt-head{ font-size:14px; }
+
+  .hint{ font-size:12.5px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+
+  /* ---------- Tender: a list, so keep it a readable column ---------- */
+  main[data-tab="tender"]{ max-width: 820px; margin-inline: auto; width:100%; }
+  .tender-header h2{ font-size:20px; }
+  .line-card{ border-radius:16px; }
+  .line-card-head{ padding:15px 18px; }
+  .line-card-head .summary .m1{ font-size:16px; }
+  .line-card-body{ padding: 0 18px 18px; }
+  .btn{ font-size:14px; padding:11px 18px; }
 
   #toast{ bottom: 32px; }
 }
+
+/* Keyboard users on desktop need a visible focus ring; mouse users do not. */
+:focus-visible{ outline: 2.5px solid var(--teal); outline-offset: 2px; border-radius: 4px; }
 
 /* Pointer-based devices get a hover affordance; touch screens must not, or the
    style sticks after a tap. */
