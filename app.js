@@ -130,6 +130,9 @@ function changeLang(lang){
 
 function render(){
   const main = document.getElementById('main');
+  // Desktop lays the two screens out differently (see the wide-screen block in
+  // styles.css): Selector becomes two columns, Tender stays a single column.
+  main.dataset.tab = currentTab;
   if (currentTab === 'selector'){
     document.getElementById('freqPill').textContent = selState.frequency || '';
     document.getElementById('freqPill').style.display = selState.frequency ? '' : 'none';

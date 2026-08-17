@@ -80,6 +80,43 @@ time the workbook is updated, referencing this app.
   under "6"+". Flagging this in case you'd like it changed — it's a one-line
   fix in `engine.js` if so.
 
+## Putting it on the company website
+
+The same URL serves both layouts — there is no separate desktop build to keep in
+sync. Below 900px it is the phone app; at 900px and above the shell widens to
+1080px, the tab bar moves up under the header as real tabs, and the Selector
+splits into form-left / result-right with the result pinned while the form
+scrolls. Tender stays a single 760px column, because a full-width line is
+unreadable.
+
+**Option 1 — link to it.** Simplest, and the only one that lets visitors install
+it on their phone:
+
+```html
+<a href="https://muhanneds.github.io/pump-selector/" target="_blank" rel="noopener">
+  Open the MSP Pump Selector
+</a>
+```
+
+**Option 2 — embed it in a page.** GitHub Pages sends no `X-Frame-Options`, so
+framing works:
+
+```html
+<iframe src="https://muhanneds.github.io/pump-selector/"
+        title="MSP Pump Selector"
+        style="width:100%; max-width:1080px; height:860px; border:0; border-radius:12px"
+        loading="lazy"></iframe>
+```
+
+Give the frame at least **900px of width** or it will render the phone layout
+inside your page, and around **860px of height** so the result panel is not cut
+off. An iframe cannot be installed to a home screen — pair it with Option 1 if
+you want visitors to be able to install it.
+
+**Option 3 — host it yourself.** Copy this folder to any HTTPS path on your own
+site (e.g. `/tools/pump-selector/`). All paths are relative, so it works from a
+subdirectory without changes.
+
 ## Languages
 
 The interface runs in **English, Turkish, Arabic and Spanish**, picked from the

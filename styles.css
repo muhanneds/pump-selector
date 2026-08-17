@@ -291,6 +291,78 @@ main{ flex:1; padding: 16px 14px calc(96px + env(safe-area-inset-bottom)); }
 }
 
 /* =========================================================================
+   Desktop / website embed  (>= 900px)
+   The phone build is a single 560px column with a fixed bottom tab bar. On a
+   wide screen that reads as a narrow strip, so here the shell widens, the tab
+   bar moves up under the header as real tabs, and the Selector splits into
+   form-left / result-right with the result pinned while the form scrolls.
+   Nothing below 900px is touched — the installed phone app is unaffected.
+   ========================================================================= */
+@media (min-width: 900px){
+  #app{ max-width: 1080px; box-shadow: 0 0 0 1px var(--line); min-height:100vh; }
+
+  .topbar{ padding: 18px 26px; }
+  .topbar h1{ font-size:19px; }
+  .topbar .sub{ font-size:12px; }
+  .topbar .brand-logo{ height:38px; }
+  .lang-select{ font-size:13px; padding:6px 10px; }
+
+  /* Tab bar: from fixed-bottom to a normal row directly under the header. */
+  .topbar{ order:0; }
+  .tabbar{ order:1; }
+  main{ order:2; }
+  .tabbar{
+    position: static; max-width:none; margin:0;
+    border-top:none; border-bottom:1px solid var(--line);
+    box-shadow:none; padding: 0 18px;
+    gap:6px;
+  }
+  .tabbar button{
+    flex:0 0 auto; flex-direction:row; gap:8px;
+    padding:14px 18px; font-size:13.5px;
+    border-bottom:2.5px solid transparent; border-radius:0;
+  }
+  .tabbar button svg{ width:18px; height:18px; }
+  .tabbar button.active{ border-bottom-color: var(--navy); background:transparent; }
+
+  main{ padding: 24px 26px 40px; }
+
+  /* Selector: form left, result right. */
+  main[data-tab="selector"]{
+    display:grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 22px;
+    align-items: start;
+  }
+  main[data-tab="selector"] .card{ margin-bottom:0; padding:22px; }
+  main[data-tab="selector"] #resultArea{ position: sticky; top: 22px; }
+  .card h2{ font-size:13.5px; }
+  .field > label{ font-size:12.5px; }
+  .segmented button{ padding:11px 6px; font-size:13.5px; }
+  .numfield{ padding:10px 14px; }
+  .numfield input{ font-size:21px; }
+  .plate{ padding:22px 22px 20px; }
+  .plate .model{ font-size:32px; }
+  .plate-grid .stat-value{ font-size:17px; }
+
+  /* Tender is a list — a full 1080px line would be unreadable. */
+  main[data-tab="tender"]{ max-width: 760px; margin-inline: auto; width:100%; }
+
+  #toast{ bottom: 32px; }
+}
+
+/* Pointer-based devices get a hover affordance; touch screens must not, or the
+   style sticks after a tap. */
+@media (hover: hover) and (pointer: fine){
+  .segmented button:hover{ background: rgba(27,58,107,.07); }
+  .segmented button.active:hover{ background: var(--navy); }
+  .btn:hover{ filter: brightness(1.07); }
+  .tabbar button:hover{ color: var(--navy); }
+  .line-card-head:hover{ background: var(--surface-2); }
+  .lang-select:hover{ background: rgba(255,255,255,.2); }
+}
+
+/* =========================================================================
    RTL (Arabic)
    Flex/grid mirror themselves; these are the cases that do not.
    ========================================================================= */
