@@ -143,6 +143,12 @@ showing a blank.
 
 ## Changelog
 
+- **Closed line cards now also show Motor and Pump Length**, alongside the
+  entered Q/H, as a third compact line — only when there's a matched model
+  to show it for. Kept caret-safe: the line is created/updated/removed as
+  the duty point changes while a card is open and being typed into, without
+  ever touching the input element itself.
+
 - **Tender screen revised.** Four changes:
   - **Closed line cards now show what you entered** (`Q=12.00 m³/h · H=50.00 m`)
     instead of the computed result — the model name stays visible, but the
