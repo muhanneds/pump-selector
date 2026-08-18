@@ -143,6 +143,19 @@ showing a blank.
 
 ## Changelog
 
+- **Closed line: HP instead of kW, `L=` prefix on length**, and forced to one
+  line (`white-space:nowrap` + ellipsis) — same treatment as the model-name
+  line above it.
+- **Head H can now be entered in feet**, the same click-to-toggle pattern as
+  the L/s flow unit, on both Selector and every Tender line, shared and
+  persisted. Every stored H and every engine call stays in metres always —
+  the pump curves themselves are digitised in metres — the toggle only
+  converts the Head H field's own display/input. Achieved head, design head
+  and alternate head in the results stay in metres, matching how the flow
+  toggle already left the result plate's own numbers untouched. Verified:
+  toggling never changes the selected model; typing a new value in feet
+  stores the precise metre equivalent; caret-safe on both screens.
+
 - **Closed line cards now also show Motor and Pump Length**, alongside the
   entered Q/H, as a third compact line — only when there's a matched model
   to show it for. Kept caret-safe: the line is created/updated/removed as
