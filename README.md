@@ -143,6 +143,28 @@ showing a blank.
 
 ## Changelog
 
+- **Tender screen revised.** Four changes:
+  - **Closed line cards now show what you entered** (`Q=12.00 m³/h · H=50.00 m`)
+    instead of the computed result — the model name stays visible, but the
+    achieved head/price is only shown once you open the card. Applies to
+    every state, including "Out of range" and "No match."
+  - **Motor power and Pump Length are now a dedicated two-column row** when a
+    card is open, instead of buried in one small mono-font meta line.
+  - **Fixed Material/Bore/Freq alignment.** The three `<select>` elements had
+    *no CSS at all* — no width, no consistent box — so each one shrank to fit
+    its own selected text and the row scattered unevenly across the page.
+    They're now styled like every other input in the app and stretch to fill
+    even columns.
+  - **Flow can now be entered in L/s.** A click-to-toggle unit pill sits next
+    to the Flow Q field's unit label, on both the Selector and every Tender
+    line — the same choice everywhere, persisted like the language setting.
+    Internally every stored value and every call into the engine stays in
+    m³/h always; the toggle only converts at the input/display boundary, so
+    switching units never changes a computed result, only how the numbers are
+    shown. Verified: toggling mid-session doesn't alter the selected model;
+    typing a new value in L/s stores the exact m³/h equivalent; toggling back
+    shows the precise original number, no rounding drift.
+
 - **New Noryl 6"+ series, "Any" ladder redesign, data corrections.** Source:
   a fresh export to `Desktop\projects\MSP_Pump_Selector_NoPricing`.
   - Added **MNP612** as a new primary pick, Q up to 12 m³/h, ahead of MNP618
