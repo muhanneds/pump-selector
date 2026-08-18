@@ -143,6 +143,14 @@ showing a blank.
 
 ## Changelog
 
+- **HP/Length moved to the top-right corner**, on the same line as the model
+  name, instead of a line below — mirrors correctly in RTL (moves to the
+  top-left). Model name truncates with an ellipsis to make room on long
+  codes, verified at 375px with a 12-character code.
+- **Added Safety margin to Tender lines** — previously Selector-only. Each
+  line now has its own safety margin, correctly feeding into its own design
+  head calculation (verified it shifts the selected model, not just cosmetic).
+
 - **Closed line: HP instead of kW, `L=` prefix on length**, and forced to one
   line (`white-space:nowrap` + ellipsis) — same treatment as the model-name
   line above it.
