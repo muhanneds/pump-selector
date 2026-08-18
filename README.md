@@ -143,6 +143,36 @@ showing a blank.
 
 ## Changelog
 
+- **New Noryl 6"+ series, "Any" ladder redesign, data corrections.** Source:
+  a fresh export to `Desktop\projects\MSP_Pump_Selector_NoPricing`.
+  - Added **MNP612** as a new primary pick, Q up to 12 m³/h, ahead of MNP618
+    in the 6"+ ladder. Its own flow/head curve and the five downstream Noryl
+    cutoffs (618/628/638/645/660) all widened to match.
+  - **"Any" is no longer a mechanical concatenation** of the 4"-only and 6"+
+    ladders. It's now its own hand-built ladder that skips MNP415/MSP414
+    entirely, because under the old concatenation they sat just above the
+    first 6" rung and made the recommended bore zigzag 4"→6"→4"→6" as flow
+    increased. Both stay fully reachable via the dedicated 4"-only bore
+    choice — confirmed neither is ever returned as a primary pick under
+    "Any" anymore, in any language, and both still work under "4\" only".
+  - Cast Iron's top cutoff (MCP11400) tightened from 420 to 414 m³/h.
+  - `MCP 643-32` had a `null` pump length in the data; now correctly 4020 mm.
+  - ⚠ **Caught and fixed before deploying:** the export also appended a
+    **trailing `null` to the *flow* arrays** (not just heads) of MSP625 and
+    MSP8125 — every model in both series, same single incomplete edit. That's
+    a different kind of null than the ones the app already handles: a null
+    inside `heads` correctly means "this stage doesn't reach this flow," but
+    a null as the *last flow value* breaks the range check `Q > flows[n-1]` —
+    JS compares `null` as `0`, so it evaluated true for almost any real Q,
+    making both series return no match for **every realistic duty point**,
+    including Q in (110, 135] where MSP8125 is a genuine primary pick, not
+    just an alternate. Dropped that trailing null from both series' flow and
+    head arrays rather than deploy it — confirmed byte-identical to their
+    pre-update values, and confirmed every other series matches the new
+    export exactly, so nothing else was touched by this fix. Worth flagging
+    to whoever maintains the spreadsheet: looks like an in-progress edit
+    (a new column started, never filled in) rather than an intentional cut.
+
 - **Updated Cast Iron selection ladder** (pulled from a fresh spreadsheet
   export, `engine.js` only — `data.js` is byte-identical to before). Replaces
   the old min/max band list, where earlier bands could shadow later ones from
