@@ -143,6 +143,22 @@ showing a blank.
 
 ## Changelog
 
+- **Updated Cast Iron selection ladder** (pulled from a fresh spreadsheet
+  export, `engine.js` only — `data.js` is byte-identical to before). Replaces
+  the old min/max band list, where earlier bands could shadow later ones from
+  ever being reached, with a single ascending-cutoff ladder built from the
+  5"/6", 7"/8" and 9"/10" bore families, so where families overlap in flow the
+  bigger bore wins as primary. 60Hz cutoffs also revised. Confirmed the new
+  ladder is genuinely in effect (Cast Iron at Q=90 m³/h now returns MCP790-03,
+  not the old MCP766) and that Stainless Steel results are unaffected (Q=12,
+  H=50 still returns MSP610-07 at 50Hz and MP617-04 at 60Hz).
+  ⚠ One thing worth checking against the spreadsheet: the source changelog
+  for this export says "MCP690 retired from the active ladder," but the
+  ladder array itself still lists it — reachable as primary for a narrow
+  window, Q > 100 up to 105 m³/h. Ported the code as delivered; flagging the
+  mismatch between that claim and what the ladder actually does in case it
+  wasn't intentional.
+
 - **Redesigned the desktop layout.** The first pass just widened the phone
   screen, which read as a phone UI stretched across a monitor — the reported
   complaint. It's now designed for the width: gradient header with a teal

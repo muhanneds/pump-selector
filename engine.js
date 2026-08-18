@@ -10,11 +10,13 @@ const LADDER_4ONLY = {
   'Cast Iron': null // always OUT OF RANGE
 };
 
-// Cast Iron 6"+ / Any: first AND(min<=Q<=max) band match, checked in this exact order.
-const CAST_IRON_BANDS = [
-  [0,24,'MCP518'],[18,33,'MCP625'],[21.6,36,'MCP630'],[0,59.4,'MCP643'],[0,79.2,'MCP665'],
-  [46.8,90,'MCP766'],[50.4,108,'MCP690'],[55,120,'MCP790'],[86,151,'MCP8122'],[86,180,'MCP8140'],
-  [126,216,'MCP8180'],[153,216,'MCP9180'],[144,245,'MCP8220'],[216,342,'MCP10350'],[0,414,'MCP11400']
+// Cast Iron 6"+ / Any: one combined ladder, built from the union of all three physical
+// bore-family bands (5"/6", 7"/8", 9"/10"), sorted by each band's own upper bound. Every
+// series gets a genuine reachable primary window this way — none are permanently shadowed.
+const CAST_IRON_LADDER = [
+  [20,'MCP518'],[28,'MCP625'],[35,'MCP630'],[50,'MCP643'],[65,'MCP665'],[70,'MCP766'],
+  [100,'MCP790'],[105,'MCP690'],[128,'MCP8122'],[160,'MCP8140'],[200,'MCP8180'],
+  [216,'MCP9180'],[240,'MCP8220'],[300.1,'MCP10350'],[420,'MCP11400']
 ];
 
 const LADDER_6PLUS = {
@@ -35,7 +37,7 @@ const LADDER_ANY = {
 
 const ALT_MAP = {
   'Cast Iron': {MCP518:'MCP625',MCP625:'MCP630',MCP630:'MCP643',MCP643:'MCP665',MCP665:'MCP766',
-                MCP766:'MCP690',MCP690:'MCP790',MCP790:'MCP8122',MCP8122:'MCP8140',MCP8140:'MCP8180',
+                MCP766:'MCP790',MCP790:'MCP690',MCP690:'MCP8122',MCP8122:'MCP8140',MCP8140:'MCP8180',
                 MCP8180:'MCP9180',MCP9180:'MCP8220',MCP8220:'MCP10350',MCP10350:'MCP11400',MCP11400:'MCP10350'},
   'Noryl': {MNP402:'MNP404',MNP404:'MNP406',MNP406:'MNP408',MNP408:'MNP409',MNP409:'MNP412',MNP412:'MNP415',
             MNP415:'MNP618',MNP618:'MNP628',MNP628:'MNP638',MNP638:'MNP645',MNP645:'MNP660',MNP660:'MNP645'},
@@ -45,8 +47,8 @@ const ALT_MAP = {
                        MSP8105:'MSP8110',MSP8110:'MSP8125',MSP8125:'MSP8160',MSP8160:'MSP10215',MSP10215:'NONE'}
 };
 
-const SIXTY_HZ_LADDER = [[24,'MP617'],[44,'MP630'],[70,'MP646'],[90,'MP660'],[120,'MP877'],
-                          [140,'MP895'],[180,'MP8125'],[240,'MP8160'],[320,'MP10215']];
+const SIXTY_HZ_LADDER = [[20,'MP617'],[40,'MP630'],[50,'MP646'],[71,'MP660'],[90,'MP877'],
+                          [120,'MP895'],[155,'MP8125'],[205,'MP8160'],[320,'MP10215']];
 const SIXTY_HZ_ALT = {MP617:'MP625',MP625:'MP617',MP630:'MP625',MP646:'MP630',MP660:'MP877',
                        MP877:'MP895',MP895:'MP8125',MP8125:'MP8160',MP8160:'MP10215',MP10215:'NONE'};
 
@@ -65,7 +67,7 @@ function selectSeries(material, sizeClass, frequency, Q) {
   }
   if (sizeClass === '6plus') {
     if (material === 'Cast Iron') {
-      for (const [min, max, tag] of CAST_IRON_BANDS) if (Q >= min && Q <= max) return tag;
+      for (const [cutoff, tag] of CAST_IRON_LADDER) if (Q <= cutoff) return tag;
       return 'OUT OF RANGE';
     }
     for (const [cutoff, tag] of LADDER_6PLUS[material]) if (Q <= cutoff) return tag;
@@ -73,7 +75,7 @@ function selectSeries(material, sizeClass, frequency, Q) {
   }
   // Any
   if (material === 'Cast Iron') {
-    for (const [min, max, tag] of CAST_IRON_BANDS) if (Q >= min && Q <= max) return tag;
+    for (const [cutoff, tag] of CAST_IRON_LADDER) if (Q <= cutoff) return tag;
     return 'OUT OF RANGE';
   }
   for (const [cutoff, tag] of LADDER_ANY[material]) if (Q <= cutoff) return tag;
@@ -129,6 +131,6 @@ function findBestModel(seriesData, Q, designHead) {
 
 if (typeof module !== 'undefined') {
   module.exports = { selectSeries, altSeries, interpolateHead, computeStages, findBestModel,
-                      LADDER_4ONLY, LADDER_6PLUS, LADDER_ANY, CAST_IRON_BANDS, ALT_MAP,
+                      LADDER_4ONLY, LADDER_6PLUS, LADDER_ANY, CAST_IRON_LADDER, ALT_MAP,
                       SIXTY_HZ_LADDER, SIXTY_HZ_ALT };
 }
