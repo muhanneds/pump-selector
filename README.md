@@ -143,6 +143,17 @@ showing a blank.
 
 ## Changelog
 
+- **Tender line form regrouped for alignment**: Material now sits alone on
+  its own full-width row (its select was previously squeezed into a
+  1/3-width column, truncating longer option text); Bore/Freq became their
+  own 2-column row; Flow Q/Head H/Safety margin became a 3-column row. Also
+  fixed a real height mismatch this exposed: `.numfield` had no explicit
+  height and rendered a couple of pixels off from `.line-select`'s 43px, so
+  a select and a numfield in the same row didn't quite line up — matched to
+  43px on mobile, reset to auto on desktop where the font is larger.
+  Confirmed byte-exact row alignment (same Y, same 43px height) and no
+  layout regressions on Selector, RTL, or desktop.
+
 - **Series pill moved to the top-right** of the plate, on the same row as
   "Selected model" — mirrors to top-left in RTL. Previewed as a mockup before
   applying, per request.
