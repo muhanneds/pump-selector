@@ -143,6 +143,20 @@ showing a blank.
 
 ## Changelog
 
+- **`interpolateHead` now clips past a padded trailing `null`/`undefined` in
+  the flow array**, instead of the old hard range check silently failing
+  every duty point when one was present. This is a permanent, source-level
+  fix for the exact defect that recurred twice in a row (see the last two
+  entries) — future exports that ship the same incomplete cell no longer
+  need a hand-patched `data.js`; the engine tolerates it on its own.
+  Verified: zero behaviour change on normal (unpadded) data — same
+  interpolated values as before at three test points; on padded data, a
+  duty point inside the real range that the old code wrongly rejected now
+  correctly interpolates, and a duty point past the real (unpadded) range
+  still correctly returns no match rather than reading into the null tail.
+  `data.js` is untouched — the fresh export's catalogue is byte-identical to
+  what was already deployed.
+
 - **Motor kW corrected across ~120 models** (Cast Iron, Noryl and Stainless
   Steel 4"/6", plus two 60Hz models) — pulled from a fresh spreadsheet
   export, `data.js` only. Every corrected value now matches its own HP figure
