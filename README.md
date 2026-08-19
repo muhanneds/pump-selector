@@ -143,6 +143,15 @@ showing a blank.
 
 ## Changelog
 
+- **Series pill moved to the top-right** of the plate, on the same row as
+  "Selected model" — mirrors to top-left in RTL. Previewed as a mockup before
+  applying, per request.
+- **Motor stats reordered: HP first, relabeled "Motor Power"; kW second,
+  still labeled "Motor".** The HP value now shows its unit (`50.00 HP`) —
+  previously it relied entirely on the column label to say "HP", which broke
+  once that label became "Motor Power".
+- **Turkish "Safety margin" renamed to "Tolerans"** (was "Güvenlik payı").
+
 - **Added subtle motion throughout** — fast (150–250ms), confirms a change
   rather than decorating the app, and respects `prefers-reduced-motion`.
   - **Result reveal**: the plate and a tender line's result fade/slide in
