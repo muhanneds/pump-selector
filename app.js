@@ -376,7 +376,7 @@ function renderSelectorHTML(){
         <label>${t('frequency')}</label>
         <div class="segmented freq" id="freqSeg">${freqButtons}</div>
       </div>
-      <div class="field row2">
+      <div class="field row3">
         <div>
           <label>${t('flowQ')}</label>
           <div class="numfield"><input type="number" inputmode="decimal" id="inputQ" value="${qToDisplay(selState.Q)}"><button type="button" class="unit unit-toggle" onclick="toggleFlowUnit()" title="${otherFlowUnitLabel()}"><bdi>${flowUnitLabel()}</bdi></button></div>
@@ -385,10 +385,10 @@ function renderSelectorHTML(){
           <label>${t('headH')}</label>
           <div class="numfield"><input type="number" inputmode="decimal" id="inputH" value="${hToDisplay(selState.H)}"><button type="button" class="unit unit-toggle" onclick="toggleHeadUnit()" title="${headUnit==='ft'?'m':'ft'}"><bdi>${headUnitLabel()}</bdi></button></div>
         </div>
-      </div>
-      <div class="field">
-        <label>${t('safety')}</label>
-        <div class="numfield" style="max-width:140px"><input type="number" inputmode="decimal" id="inputSafety" value="${selState.safety}"><span class="unit">%</span></div>
+        <div>
+          <label>${t('safety')}</label>
+          <div class="numfield"><input type="number" inputmode="decimal" id="inputSafety" value="${selState.safety}"><span class="unit">%</span></div>
+        </div>
       </div>
       <div id="hintSlot">${renderHintHTML(ready, r)}</div>
     </div>
