@@ -143,6 +143,20 @@ showing a blank.
 
 ## Changelog
 
+- **Motor kW corrected across ~120 models** (Cast Iron, Noryl and Stainless
+  Steel 4"/6", plus two 60Hz models) — pulled from a fresh spreadsheet
+  export, `data.js` only. Every corrected value now matches its own HP figure
+  at the standard 0.746 kW/HP ratio (checked programmatically, zero
+  exceptions); previously several were off by roughly 2×. `engine.js` is
+  unchanged this round.
+  ⚠ **Same recurring defect as last time, caught and fixed again:** the
+  export re-introduced the trailing `null` in the *flow* arrays of MSP625
+  and MSP8125, which breaks both series' reachability for every realistic
+  duty point (see the earlier changelog entry for why). Confirmed nothing
+  else in those two series changed — the fix restores them to byte-identical
+  values to before. Worth mentioning to whoever regenerates these exports:
+  this is the second time this exact cell has come back empty.
+
 - **HP/Length moved to the top-right corner**, on the same line as the model
   name, instead of a line below — mirrors correctly in RTL (moves to the
   top-left). Model name truncates with an ellipsis to make room on long
