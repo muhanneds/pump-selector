@@ -143,6 +143,35 @@ showing a blank.
 
 ## Changelog
 
+- **Added subtle motion throughout** — fast (150–250ms), confirms a change
+  rather than decorating the app, and respects `prefers-reduced-motion`.
+  - **Result reveal**: the plate and a tender line's result fade/slide in
+    when the result actually changes, not on every keystroke — a per-line
+    (and per-selector) "last shown result" key is tracked so retyping a
+    digit that leaves the same model selected doesn't replay it.
+  - **Tab switching**: Selector/Tender slides in from the direction of the
+    tab just chosen. Caught a real bug while building this: `#main` is the
+    same persistent element across every switch (only its content is
+    replaced), so naively adding a direction class made both directions'
+    classes pile up after a couple of switches, animating neither correctly.
+    Fixed by clearing both before adding the new one, with a forced reflow
+    so the same direction twice in a row still replays.
+  - **Tender line cards**: open/close now genuinely animates height, which
+    required a real restructure — the card body is always rendered (not
+    conditional on open) and CSS-collapsed via `max-height`, and
+    `toggleLine()` now toggles the `.open` class on the existing DOM element
+    in place instead of calling a full `render()`. A full re-render replaces
+    the element outright, which has no "before" state to transition from —
+    that's *why* the whole app used to snap instead of animate here.
+    Adding a line plays an entrance animation on that one new card only
+    (not a blind CSS auto-play, which would replay on every card whenever
+    any of them re-renders). Deleting is JS-orchestrated: animate out, then
+    mutate state — with a timeout safety net in case `transitionend` never
+    fires.
+  - **Press feedback**: segmented controls, buttons, and unit toggles get a
+    small `:active` scale-down, universal for touch and mouse (unlike the
+    existing hover rules, which are correctly gated to pointer devices only).
+
 - **`interpolateHead` now clips past a padded trailing `null`/`undefined` in
   the flow array**, instead of the old hard range check silently failing
   every duty point when one was present. This is a permanent, source-level
