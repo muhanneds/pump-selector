@@ -488,15 +488,13 @@ function lineOutputs(line){
       summaryModel = `<bdi>${r.primary.model.name}</bdi>`;
       summaryExtra = `<bdi>${fmt(r.primary.model.hp,2)} HP · L=${r.primary.model.len ? r.primary.model.len+' mm' : '—'}</bdi>`;
       stripHTML = `
-        <div class="result-strip${justChanged ? ' pop-in' : ''}">
-          <span class="rmodel"><bdi>${r.primary.model.name}</bdi></span>
-          <span class="rmeta"><bdi>${fmt(r.primary.achievedHead)} m</bdi></span>
-        </div>
-        <div class="line-stats">
+        <div class="pump-stats${justChanged ? ' pop-in' : ''}">
+          <div><div class="stat-label">${t('selectedPump')}</div><div class="stat-value"><bdi>${r.primary.model.name}</bdi></div></div>
           <div><div class="stat-label">${t('motor')}</div><div class="stat-value"><bdi>${fmt(r.primary.model.kw,2)} kW</bdi></div></div>
           <div><div class="stat-label">${t('length')}</div><div class="stat-value"><bdi>${r.primary.model.len ? r.primary.model.len+' mm' : '—'}</bdi></div></div>
+          <div><div class="stat-label">HM</div><div class="stat-value"><bdi>${fmt(r.primary.achievedHead)} m</bdi></div></div>
         </div>
-        ${r.alt && r.alt.model ? `<div class="result-strip" style="margin-top:6px;opacity:.75"><span class="rmeta">${t('altShort')} <bdi>${prettyTag(r.altTag)}</bdi></span><span class="rmeta"><bdi>${r.alt.model.name}</bdi></span></div>` : ''}
+        ${r.alt && r.alt.model ? `<div class="result-strip alt-row"><span class="rmeta">${t('altShort')} <bdi>${r.alt.model.name}</bdi></span><span class="rmodel">${r.alt.model.len ? '<span class="strip-label">'+t('length')+'</span> <bdi>'+r.alt.model.len+' mm</bdi>' : ''}</span></div>` : ''}
       `;
     }
   }
@@ -533,13 +531,10 @@ function renderLineCard(line, idx){
         <div><label>${t('bore')}</label><select class="line-select" data-field="sizeClass">${sizeOpts}</select></div>
         <div><label>${t('freq')}</label><select class="line-select" data-field="frequency">${freqOpts}</select></div>
       </div>
-      <div class="field row2">
+      <div class="field row3 duty-row">
         <div><label>${t('flowQUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="Q" value="${qToDisplay(line.Q)}"><button type="button" class="unit unit-toggle" onclick="toggleFlowUnit()" title="${otherFlowUnitLabel()}"><bdi>${flowUnitLabel()}</bdi></button></div></div>
         <div><label>${t('headHUnit')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="H" value="${hToDisplay(line.H)}"><button type="button" class="unit unit-toggle" onclick="toggleHeadUnit()" title="${headUnit==='ft'?'m':'ft'}"><bdi>${headUnitLabel()}</bdi></button></div></div>
-      </div>
-      <div class="field" style="max-width:160px;">
-        <label>${t('safety')}</label>
-        <div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="safety" value="${line.safety||0}"><span class="unit">%</span></div>
+        <div><label>${t('safety')}</label><div class="numfield"><input type="number" inputmode="decimal" class="line-input" data-field="safety" value="${line.safety||0}"><span class="unit">%</span></div></div>
       </div>
       <div class="strip-slot">${stripHTML}</div>
       <div class="field" style="display:flex; gap:8px; margin-top:14px;">

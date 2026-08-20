@@ -156,7 +156,7 @@ main{ flex:1; padding: 16px 14px calc(96px + env(safe-area-inset-bottom)); }
 }
 .numfield input{
   border:none; background:transparent; outline:none;
-  font-family: var(--font-mono); font-size: 19px; font-weight:600;
+  font-family: var(--font-mono); font-size: 17px; font-weight:600;
   color: var(--ink); width:100%; -moz-appearance: textfield;
 }
 .numfield input::-webkit-outer-spin-button,
@@ -174,6 +174,10 @@ button.unit.unit-toggle:active{ background: var(--amber); border-color: var(--am
 
 .row2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
 .row3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; }
+/* Flow Q/Head H/Safety margin rows — Flow Q's numfield carries a unit-toggle
+   button alongside the digits, so it needs a bit more room than an even
+   third to fit 3-digit values without the button crowding the number. */
+.row3.duty-row{ grid-template-columns: 1.18fr 1fr 1fr; }
 
 /* Native <select>s had no styling at all before this — they shrank to their
    own text and scattered unevenly across row3. Give them the same box
@@ -318,16 +322,23 @@ button.unit.unit-toggle:active{ background: var(--amber); border-color: var(--am
 .result-strip .rmodel{ font-family: var(--font-mono); font-weight:700; font-size:13.5px; color:var(--navy);}
 .result-strip .rmeta{ font-family: var(--font-mono); font-size:12px; color: var(--ink-soft); }
 .oor{ color: var(--danger) !important; }
+/* Small muted label riding inside a value line — used for the Alt row's
+   pump-length readout ("Pump Length" + bold "805 mm"). */
+.result-strip .strip-label{ font-family: var(--font-ui); font-weight:600; font-size:11px; color: var(--ink-soft); }
+/* Alt-series suggestion, de-emphasised below the primary result. */
+.result-strip.alt-row{ opacity:.75; margin-top:6px; }
 
-/* Motor + Pump Length, together as one glanceable row when a line is open —
-   the two numbers a buyer asks about first, alongside model and head. */
-.line-stats{
-  display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+/* Selected pump, motor, length and achieved head together as one glanceable
+   strip once a line is open and matched — the numbers a buyer asks about
+   first, all in one place instead of split across a result line + a grid. */
+.pump-stats{
+  display:grid; grid-template-columns: 2fr 1.1fr 1fr auto; gap:8px;
   background: var(--surface-2); border-radius: var(--radius-md);
   padding: 10px 12px; margin-top: 8px;
 }
-.line-stats .stat-label{ font-size:10px; color: var(--ink-faint); text-transform:uppercase; letter-spacing:.5px; font-weight:700; }
-.line-stats .stat-value{ font-family: var(--font-mono); font-size:15px; font-weight:700; color: var(--ink); margin-top:3px; }
+.pump-stats > div{ min-width:0; }
+.pump-stats .stat-label{ font-size:9.5px; color: var(--ink-faint); text-transform:uppercase; letter-spacing:.3px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pump-stats .stat-value{ font-family: var(--font-mono); font-size:13px; font-weight:700; color: var(--ink); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 .empty{
   text-align:center; padding: 48px 20px; color: var(--ink-faint);
@@ -420,7 +431,7 @@ button.unit.unit-toggle:active{ background: var(--amber); border-color: var(--am
   .field > label{ font-size:11.5px; }
   .segmented button{ padding:11px 6px; font-size:13px; }
   .numfield{ padding:11px 14px; }
-  .numfield input{ font-size:22px; }
+  .numfield input{ font-size:20px; }
 
   /* ---------- Result: read as a spec sheet, not a phone card ---------- */
   .plate{ padding: 28px 30px 26px; border-radius:20px; }
@@ -533,16 +544,27 @@ button.unit.unit-toggle:active{ background: var(--amber); border-color: var(--am
 /* Logical property so the unit sits after the number in both directions. */
 .numfield .unit{ margin-left:0; margin-inline-start:8px; }
 
+/* pump-stats: the LTR column widths were tuned so a mono-space model code
+   fits on one line in a single row of 4. Arabic labels ("المضخة المختارة"
+   etc.) are long enough that no width split of one row makes all four sit
+   comfortably — so instead of chasing fractions, Arabic gets a 2x2 grid:
+   every cell gets a real half-width, nothing is squeezed to fit a row. */
+[dir="rtl"] .pump-stats{
+  grid-template-columns: 1fr 1fr;
+  row-gap: 12px;
+}
+
 /* Model codes, numbers and units are always read left-to-right, even inside
    Arabic text. <bdi> isolates them; this keeps their internal order intact so
-   "MSP610-07" never renders as "07-MSP610". */
+   "MSP610-07" never renders as "07-MSP610". .rmeta/.rmodel are NOT forced to
+   direction:ltr here -- they carry translated Arabic labels (Alt, pump
+   length) alongside the bdi-isolated numbers, and forcing the whole span
+   into LTR would reverse the line's reading flow instead of just the number. */
 bdi{ unicode-bidi: isolate; }
 [dir="rtl"] .plate .model,
 [dir="rtl"] .plate-grid .stat-value,
-[dir="rtl"] .line-stats .stat-value,
+[dir="rtl"] .pump-stats .stat-value,
 [dir="rtl"] .tender-count,
-[dir="rtl"] .result-strip .rmodel,
-[dir="rtl"] .result-strip .rmeta,
 [dir="rtl"] .altbox .alt-model,
 [dir="rtl"] .altbox .alt-head,
 [dir="rtl"] .line-card-head .summary .m1,
@@ -559,12 +581,14 @@ bdi{ unicode-bidi: isolate; }
 [dir="rtl"] #toast{ transform: translateX(50%) translateY(20px); right:50%; left:auto; }
 [dir="rtl"] #toast.show{ transform: translateX(50%) translateY(0); }
 
-/* Arabic has no capital letters — uppercasing and wide tracking hurt it. */
+/* Arabic has no capital letters — uppercasing and wide tracking hurt it
+   (wide tracking especially: it breaks the cursive joining between Arabic
+   letters, which reads as badly misaligned/broken text). */
 [dir="rtl"] .card h2,
 [dir="rtl"] .field > label,
 [dir="rtl"] .plate .plate-label,
 [dir="rtl"] .plate-grid .stat-label,
-[dir="rtl"] .line-stats .stat-label,
+[dir="rtl"] .pump-stats .stat-label,
 [dir="rtl"] .altbox .alt-label{
   text-transform: none;
   letter-spacing: 0;
