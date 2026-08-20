@@ -376,7 +376,7 @@ function renderSelectorHTML(){
         <label>${t('frequency')}</label>
         <div class="segmented freq" id="freqSeg">${freqButtons}</div>
       </div>
-      <div class="field row3">
+      <div class="field row3 duty-row">
         <div>
           <label>${t('flowQ')}</label>
           <div class="numfield"><input type="number" inputmode="decimal" id="inputQ" value="${qToDisplay(selState.Q)}"><button type="button" class="unit unit-toggle" onclick="toggleFlowUnit()" title="${otherFlowUnitLabel()}"><bdi>${flowUnitLabel()}</bdi></button></div>
