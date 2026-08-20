@@ -332,7 +332,7 @@ button.unit.unit-toggle:active{ background: var(--amber); border-color: var(--am
    strip once a line is open and matched — the numbers a buyer asks about
    first, all in one place instead of split across a result line + a grid. */
 .pump-stats{
-  display:grid; grid-template-columns: 1.5fr 1.3fr 1.2fr auto; gap:8px;
+  display:grid; grid-template-columns: 1.65fr 1.3fr 1.05fr auto; gap:8px;
   background: var(--surface-2); border-radius: var(--radius-md);
   padding: 10px 12px; margin-top: 8px;
 }
