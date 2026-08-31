@@ -43,7 +43,7 @@ const STRINGS = {
     duplicate:'Duplicate', del:'Delete',
     lineDuplicated:'Line duplicated', lineRemoved:'Line removed',
     oorCaps:'OUT OF RANGE', noMatchIn:'No match in {tag}', altShort:'Alt',
-    contactSales:'Contact our sales team for a custom solution.',
+    contactSales:'Contact our sales team for these specifications.',
     followUs:'Follow us', contactUs:'Contact us'
   },
   tr: {
@@ -71,7 +71,7 @@ const STRINGS = {
     duplicate:'Çoğalt', del:'Sil',
     lineDuplicated:'Satır çoğaltıldı', lineRemoved:'Satır silindi',
     oorCaps:'ARALIK DIŞI', noMatchIn:'{tag} serisinde eşleşme yok', altShort:'Alt',
-    contactSales:'Özel bir çözüm için satış ekibimizle iletişime geçin.',
+    contactSales:'Bu özellikler için satış ekibimizle iletişime geçin.',
     followUs:'Bizi takip edin', contactUs:'Bize ulaşın'
   },
   ar: {
@@ -99,7 +99,7 @@ const STRINGS = {
     duplicate:'نسخ', del:'حذف',
     lineDuplicated:'تم نسخ البند', lineRemoved:'تم حذف البند',
     oorCaps:'خارج النطاق', noMatchIn:'لا يوجد تطابق في {tag}', altShort:'بديل',
-    contactSales:'تواصل مع فريق المبيعات للحصول على حل مخصص.',
+    contactSales:'تواصل مع فريق المبيعات لهذه المواصفات.',
     followUs:'تابعنا', contactUs:'تواصل معنا'
   },
   es: {
@@ -127,7 +127,7 @@ const STRINGS = {
     duplicate:'Duplicar', del:'Eliminar',
     lineDuplicated:'Línea duplicada', lineRemoved:'Línea eliminada',
     oorCaps:'FUERA DE RANGO', noMatchIn:'Sin coincidencia en {tag}', altShort:'Alt',
-    contactSales:'Contacte a nuestro equipo de ventas para una solución personalizada.',
+    contactSales:'Contacte a nuestro equipo de ventas para estas especificaciones.',
     followUs:'Síguenos', contactUs:'Contáctenos'
   }
 };
