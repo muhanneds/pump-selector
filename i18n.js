@@ -42,7 +42,9 @@ const STRINGS = {
     flowQUnit:'Flow Q', headHUnit:'Head H',
     duplicate:'Duplicate', del:'Delete',
     lineDuplicated:'Line duplicated', lineRemoved:'Line removed',
-    oorCaps:'OUT OF RANGE', noMatchIn:'No match in {tag}', altShort:'Alt'
+    oorCaps:'OUT OF RANGE', noMatchIn:'No match in {tag}', altShort:'Alt',
+    contactSales:'Contact our sales team for a custom solution.',
+    followUs:'Follow us'
   },
   tr: {
     appTitle:'MSP Pompa', tabSelector:'Seçici', tabTender:'Teklif',
@@ -68,7 +70,9 @@ const STRINGS = {
     flowQUnit:'Debi Q', headHUnit:'Hm',
     duplicate:'Çoğalt', del:'Sil',
     lineDuplicated:'Satır çoğaltıldı', lineRemoved:'Satır silindi',
-    oorCaps:'ARALIK DIŞI', noMatchIn:'{tag} serisinde eşleşme yok', altShort:'Alt'
+    oorCaps:'ARALIK DIŞI', noMatchIn:'{tag} serisinde eşleşme yok', altShort:'Alt',
+    contactSales:'Özel bir çözüm için satış ekibimizle iletişime geçin.',
+    followUs:'Bizi takip edin'
   },
   ar: {
     appTitle:'مضخات MSP', tabSelector:'المحدد', tabTender:'العطاء',
@@ -94,7 +98,9 @@ const STRINGS = {
     flowQUnit:'التدفق Q', headHUnit:'الرفع H',
     duplicate:'نسخ', del:'حذف',
     lineDuplicated:'تم نسخ البند', lineRemoved:'تم حذف البند',
-    oorCaps:'خارج النطاق', noMatchIn:'لا يوجد تطابق في {tag}', altShort:'بديل'
+    oorCaps:'خارج النطاق', noMatchIn:'لا يوجد تطابق في {tag}', altShort:'بديل',
+    contactSales:'تواصل مع فريق المبيعات للحصول على حل مخصص.',
+    followUs:'تابعنا'
   },
   es: {
     appTitle:'Bombas MSP', tabSelector:'Selector', tabTender:'Licitación',
@@ -120,7 +126,9 @@ const STRINGS = {
     flowQUnit:'Caudal Q', headHUnit:'Altura H',
     duplicate:'Duplicar', del:'Eliminar',
     lineDuplicated:'Línea duplicada', lineRemoved:'Línea eliminada',
-    oorCaps:'FUERA DE RANGO', noMatchIn:'Sin coincidencia en {tag}', altShort:'Alt'
+    oorCaps:'FUERA DE RANGO', noMatchIn:'Sin coincidencia en {tag}', altShort:'Alt',
+    contactSales:'Contacte a nuestro equipo de ventas para una solución personalizada.',
+    followUs:'Síguenos'
   }
 };
 
