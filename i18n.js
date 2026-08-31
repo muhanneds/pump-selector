@@ -44,7 +44,7 @@ const STRINGS = {
     lineDuplicated:'Line duplicated', lineRemoved:'Line removed',
     oorCaps:'OUT OF RANGE', noMatchIn:'No match in {tag}', altShort:'Alt',
     contactSales:'Contact our sales team for a custom solution.',
-    followUs:'Follow us'
+    followUs:'Follow us', contactUs:'Contact us'
   },
   tr: {
     appTitle:'MSP Pompa', tabSelector:'Seçici', tabTender:'Teklif',
@@ -72,7 +72,7 @@ const STRINGS = {
     lineDuplicated:'Satır çoğaltıldı', lineRemoved:'Satır silindi',
     oorCaps:'ARALIK DIŞI', noMatchIn:'{tag} serisinde eşleşme yok', altShort:'Alt',
     contactSales:'Özel bir çözüm için satış ekibimizle iletişime geçin.',
-    followUs:'Bizi takip edin'
+    followUs:'Bizi takip edin', contactUs:'Bize ulaşın'
   },
   ar: {
     appTitle:'مضخات MSP', tabSelector:'المحدد', tabTender:'العطاء',
@@ -100,7 +100,7 @@ const STRINGS = {
     lineDuplicated:'تم نسخ البند', lineRemoved:'تم حذف البند',
     oorCaps:'خارج النطاق', noMatchIn:'لا يوجد تطابق في {tag}', altShort:'بديل',
     contactSales:'تواصل مع فريق المبيعات للحصول على حل مخصص.',
-    followUs:'تابعنا'
+    followUs:'تابعنا', contactUs:'تواصل معنا'
   },
   es: {
     appTitle:'Bombas MSP', tabSelector:'Selector', tabTender:'Licitación',
@@ -128,7 +128,7 @@ const STRINGS = {
     lineDuplicated:'Línea duplicada', lineRemoved:'Línea eliminada',
     oorCaps:'FUERA DE RANGO', noMatchIn:'Sin coincidencia en {tag}', altShort:'Alt',
     contactSales:'Contacte a nuestro equipo de ventas para una solución personalizada.',
-    followUs:'Síguenos'
+    followUs:'Síguenos', contactUs:'Contáctenos'
   }
 };
 
