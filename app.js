@@ -384,7 +384,7 @@ function renderResultsHTML(ready, r){
     }
   }
 
-  return plateHTML + altHTML;
+  return plateHTML + altHTML + renderSocialFooterHTML();
 }
 
 function renderHintHTML(ready, r){
@@ -438,7 +438,6 @@ function renderSelectorHTML(){
     </div>
 
     <div id="resultArea">${renderResultsHTML(ready, r)}</div>
-    ${renderSocialFooterHTML()}
   `;
 }
 
